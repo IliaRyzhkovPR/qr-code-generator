@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBAX Business Card</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  .card {
+    width: 350px;
+    height: 200px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card-front, .card-back {
+    padding: 20px;
+  }
+  .card-front {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-back {
+    background-image: url('exeter-cathedral.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: white;
+  }
+  .logo {
+    max-width: 120px;
+  }
+  .qr-code {
+    max-width: 100px;
+  }
+  .cta {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #33627D;
+  }
+  .contact-info {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background-color: rgba(51, 98, 125, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .contact-info h3, .contact-info p {
+    margin: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-front">
+    <img src="dbax-logo.jpg" alt="DBAX Logo" class="logo">
+    <div>
+      <img src="dbax-qr-code.jpg" alt="QR Code" class="qr-code">
+      <div class="cta">Scan to connect</div>
+    </div>
+  </div>
+  <div class="card-back">
+    <div class="contact-info">
+      <h3>John Doe</h3>
+      <p>CEO, DBAX</p>
+      <p>Email: john.doe@dbax.com</p>
+      <p>Phone: (123) 456-7890</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
