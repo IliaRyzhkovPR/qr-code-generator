@@ -1,43 +1,88 @@
-# 1. Create a new virtual environment
+# vCard QR Code Generator
 
-python -m venv myenv
+This project generates a customized QR code containing vCard information, with options for custom colors, logo placement, and styling.
 
-# 2. Activate the virtual environment
+## Setup
 
-# On Windows:
+1. Create a new virtual environment:
+   ```
+   python -m venv myenv
+   ```
 
-myenv\Scripts\activate
+2. Activate the virtual environment:
+   - On Windows:
+     ```
+     myenv\Scripts\activate
+     ```
+   - On macOS and Linux:
+     ```
+     source myenv/bin/activate
+     ```
 
-# On macOS and Linux:
+3. Install required packages:
+   ```
+   pip install qrcode[pil] vobject Pillow
+   ```
 
-source myenv/bin/activate
+4. Verify the installation:
+   ```
+   python -c "import vobject; import qrcode; import PIL; print(f'vobject: {vobject.__version__}, qrcode: {qrcode.__version__}, Pillow: {PIL.__version__}')"
+   ```
 
-# 3. Your prompt should change, indicating the active environment
+5. (Optional) Generate a requirements.txt file:
+   ```
+   pip freeze > requirements.txt
+   ```
 
-# Now you can install packages isolated to this environment
+## Usage
 
-pip install vobject
+1. Place your logo image (if using) in the same directory as the script.
 
-# 4. Verify the installation
+2. Modify the `generate_vcard_qr` function call in the script with your desired information:
 
-python -c "import vobject; print(vobject.__version__)"
+   ```python
+   generate_vcard_qr(
+       name="Your Name",
+       title="Your Title",
+       phone="Your Phone Number",
+       email="your.email@example.com",
+       company="Your Company",
+       website="https://your-website.com",
+       linkedin="https://www.linkedin.com/in/yourprofile/",
+       youtube="https://www.youtube.com/@yourchannel",
+       output_filename="your_qr_code.png",
+       logo_path="your_logo.png",
+       qr_color='#FF8138',
+       frame_color='#33627D',
+       frame_width=10,
+       corner_radius=20
+   )
+   ```
 
-# 5. When you're done, you can deactivate the environment
+3. Run the script:
+   ```
+   python qr_code.py
+   ```
 
+4. The generated QR code will be saved with the filename specified in `output_filename`.
+
+## Customization Options
+
+- `qr_color`: The color of the QR code (default: '#FF8138')
+- `frame_color`: The color of the frame around the QR code (default: '#33627D')
+- `frame_width`: The width of the frame in pixels (default: 10)
+- `corner_radius`: The radius of the rounded corners in pixels (default: 20)
+- `logo_path`: Path to your logo image file (optional)
+
+## Deactivating the Virtual Environment
+
+When you're done, deactivate the virtual environment:
+```
 deactivate
+```
 
-# 6. To use the environment again later, just activate it
+## Notes
 
-# No need to recreate it
-
-# 7. If you want to see all installed packages in the environment
-
-pip list
-
-# 8. To create a requirements.txt file
-
-pip freeze > requirements.txt
-
-# 9. To install from a requirements.txt file in a new environment
-
-# pip install -r requirements.txt
+- Ensure that the Montserrat font is installed or available in the specified path for optimal text rendering.
+- The script uses the vCard format to store contact information in the QR code.
+- The generated QR code includes a frame and rounded corners for improved aesthetics.

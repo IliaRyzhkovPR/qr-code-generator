@@ -5,3 +5,4 @@ qrcode==7.4.2
 six==1.16.0
 typing_extensions==4.12.2
 vobject==0.9.7
+segno==1.6.1

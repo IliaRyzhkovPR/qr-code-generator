@@ -3,55 +3,36 @@ from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 import os
-
 import vobject
 
-def create_vcard(name, title, phone, email, company, website, linkedin, youtube):
+def generate_vcard_qr(name, title, phone, email, company, website, linkedin, youtube, 
+                      output_filename, logo_path=None, qr_color='#FF8138', 
+                      frame_color='#33627D', frame_width=10, corner_radius=20):
+    # Create vCard
     vcard = vobject.vCard()
-    vcard.add('n')
-    vcard.n.value = vobject.vcard.Name(family=name.split()[-1], given=name.split()[0])
-    vcard.add('fn')
-    vcard.fn.value = name
-    vcard.add('title')
-    vcard.title.value = title
-    vcard.add('tel')
-    vcard.tel.value = phone
+    vcard.add('n').value = vobject.vcard.Name(family=name.split()[-1], given=name.split()[0])
+    vcard.add('fn').value = name
+    vcard.add('title').value = title
+    vcard.add('tel').value = phone
     vcard.tel.type_param = "CELL"
-    vcard.add('email')
-    vcard.email.value = email
-    vcard.add('org')
-    vcard.org.value = [company]
-    
-    url_work = vcard.add('url')
-    url_work.value = website
-    url_work.type_param = "WORK"
-    
-    url_linkedin = vcard.add('url')
-    url_linkedin.value = linkedin
-    url_linkedin.type_param = "LinkedIn"
+    vcard.add('email').value = email
+    vcard.add('org').value = [company]
+    vcard.add('url').value = website
+    vcard.url.type_param = "WORK"
+    vcard.add('url').value = linkedin
+    vcard.url.type_param = "LinkedIn"
+    vcard.add('url').value = youtube
+    vcard.url.type_param = "YouTube"
 
-    url_youtube = vcard.add('url')
-    url_youtube.value = youtube
-    url_youtube.type_param = "YouTube"
+    vcard_data = vcard.serialize()
 
-    return vcard.serialize()
-
-def generate_qr_code(vcard_data, company, filename, logo_path=None):
     # Create QR code
     qr = qrcode.QRCode(version=None, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=10, border=4)
     qr.add_data(vcard_data)
     qr.make(fit=True)
 
-    # Create QR code image with brand colors
-    img = qr.make_image(fill_color='#FF8138', back_color="white").convert('RGB')
-
-    # Change black pixels to #FF8138
-    orange_rgb = (255, 129, 56)  # RGB values for #FF8138
-    pixels = img.load()
-    for i in range(img.size[0]):
-        for j in range(img.size[1]):
-            if pixels[i, j] == (0, 0, 0, 255):  # If the pixel is black
-                pixels[i, j] = orange_rgb + (255,)  # Change to orange, keep alpha at 255
+    # Create QR code image with specified color
+    img = qr.make_image(fill_color=qr_color, back_color="white").convert('RGB')
 
     # Calculate center area to clear
     size = img.size[0]
@@ -79,39 +60,37 @@ def generate_qr_code(vcard_data, company, filename, logo_path=None):
         text_width = text_bbox[2] - text_bbox[0]
         text_height = text_bbox[3] - text_bbox[1]
         text_pos = ((size - text_width) // 2, (size - text_height) // 2)
-        draw.text(text_pos, company, font=font, fill="#33627D")
+        draw.text(text_pos, company, font=font, fill=frame_color)
 
     # Add a frame
-    framed = ImageOps.expand(img, border=10, fill='#33627D')
+    framed = ImageOps.expand(img, border=frame_width, fill=frame_color)
     draw = ImageDraw.Draw(framed)
-    draw.rectangle([0, 0, framed.width, framed.height], outline="#FF8138", width=5)
-
-    # Add call-to-action
-    # cta_font = ImageFont.truetype(font_path, 34) if os.path.exists(font_path) else ImageFont.load_default()
-    # cta_text = "Scan to connect!"
-    # text_bbox = draw.textbbox((0, 0), cta_text, font=cta_font)
-    # text_width = text_bbox[2] - text_bbox[0]
-    # draw.text(((framed.width - text_width) // 2, framed.height - 30), cta_text, font=cta_font, fill="#0047AB")
+    draw.rectangle([0, 0, framed.width, framed.height], outline=qr_color, width=5)
 
     # Round the corners
     mask = Image.new('L', framed.size, 0)
     mask_draw = ImageDraw.Draw(mask)
-    mask_draw.rounded_rectangle([0, 0, framed.width, framed.height], 20, fill=255)
+    mask_draw.rounded_rectangle([0, 0, framed.width, framed.height], corner_radius, fill=255)
     output = ImageOps.fit(framed, mask.size, centering=(0.5, 0.5))
     output.putalpha(mask)
 
-    output.save(filename)
+    output.save(output_filename)
+    print(f"QR code has been generated as '{output_filename}'")
 
-# Generate QR code
-company_name = "DBAX"
-vcard_data = create_vcard(
-    "Ilia Ryzhkov", 
-    "Technical and Data Architect", 
-    "+447479563847", 
-    "ilia.ryzhkov@dbax.co.uk", 
-    company_name, 
-    "https://dbax.co.uk",
-    "https://www.linkedin.com/in/ryzhkovilya/",
-    "https://www.youtube.com/@DBAXLTD"
+# Example usage
+generate_vcard_qr(
+    name="John Doe",
+    title="Software Engineer",
+    phone="+1234567890",
+    email="john.doe@example.com",
+    company="Tech Co",
+    website="https://example.com",
+    linkedin="https://www.linkedin.com/in/johndoe/",
+    youtube="https://www.youtube.com/@johndoe",
+    output_filename="john_doe_qr.png",
+    logo_path="techco_logo.png",
+    qr_color='#00FF00',
+    frame_color='#0000FF',
+    frame_width=15,
+    corner_radius=30
 )
-generate_qr_code(vcard_data, company_name, "contact_qr.png", logo_path="Logo.png")
