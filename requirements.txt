@@ -8,3 +8,4 @@ vobject==0.9.7
 segno==1.6.1
 flask==3.0.3
 requests==2.32.3
+gunicorn
