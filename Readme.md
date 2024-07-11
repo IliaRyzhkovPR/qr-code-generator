@@ -1,15 +1,29 @@
 # vCard QR Code Generator
 
-This project generates a customized QR code containing vCard information, with options for custom colors, logo placement, and styling.
+This project generates a customised QR code containing vCard information, with options for custom colours, font selection, and styling.
+
+## Features
+
+- Generate QR codes with vCard information
+- Customisable QR code and frame colours
+- Google Fonts integration for text styling
+- Responsive web interface
+- Downloadable QR code image
 
 ## Setup
 
-1. Create a new virtual environment:
+1. Clone the repository:
+   ```
+   git clone https://github.com/IliaRyzhkovPR/qr-code-generator
+   cd qr-code-generator
+   ```
+
+2. Create a new virtual environment:
    ```
    python -m venv myenv
    ```
 
-2. Activate the virtual environment:
+3. Activate the virtual environment:
    - On Windows:
      ```
      myenv\Scripts\activate
@@ -19,70 +33,57 @@ This project generates a customized QR code containing vCard information, with o
      source myenv/bin/activate
      ```
 
-3. Install required packages:
+4. Install required packages:
    ```
-   pip install qrcode[pil] vobject Pillow
-   ```
-
-4. Verify the installation:
-   ```
-   python -c "import vobject; import qrcode; import PIL; print(f'vobject: {vobject.__version__}, qrcode: {qrcode.__version__}, Pillow: {PIL.__version__}')"
-   ```
-
-5. (Optional) Generate a requirements.txt file:
-   ```
-   pip freeze > requirements.txt
+   pip install -r requirements.txt
    ```
 
 ## Usage
 
-1. Place your logo image (if using) in the same directory as the script.
-
-2. Modify the `generate_vcard_qr` function call in the script with your desired information:
-
-   ```python
-   generate_vcard_qr(
-       name="Your Name",
-       title="Your Title",
-       phone="Your Phone Number",
-       email="your.email@example.com",
-       company="Your Company",
-       website="https://your-website.com",
-       linkedin="https://www.linkedin.com/in/yourprofile/",
-       youtube="https://www.youtube.com/@yourchannel",
-       output_filename="your_qr_code.png",
-       logo_path="your_logo.png",
-       qr_color='#FF8138',
-       frame_color='#33627D',
-       frame_width=10,
-       corner_radius=20
-   )
+1. Run the Flask application:
+   ```
+   python app.py
    ```
 
-3. Run the script:
-   ```
-   python qr_code.py
-   ```
+2. Open a web browser and navigate to `http://localhost:5000`.
 
-4. The generated QR code will be saved with the filename specified in `output_filename`.
+3. Fill in the form with your contact information, select colors and font, and click "Generate QR Code".
 
-## Customization Options
+4. The generated QR code will be downloaded automatically.
 
-- `qr_color`: The color of the QR code (default: '#FF8138')
-- `frame_color`: The color of the frame around the QR code (default: '#33627D')
-- `frame_width`: The width of the frame in pixels (default: 10)
-- `corner_radius`: The radius of the rounded corners in pixels (default: 20)
-- `logo_path`: Path to your logo image file (optional)
+## Deployment
 
-## Deactivating the Virtual Environment
+This application is deployed on Render. Follow these steps to do the same:
 
-When you're done, deactivate the virtual environment:
-```
-deactivate
-```
+1. Push your code to a GitHub repository.
+2. Create a new Web Service on Render, connecting to your GitHub repo.
+3. Render will automatically detect it's a Python app and set most configuration options.
+4. Set the following:
+   - Environment: `Python`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `gunicorn app:app`
+5. Click "Create Web Service".
+
+## Customisation Options
+
+- `qr_color`: The colour of the QR code
+- `frame_color`: The colour of the frame around the QR code
+- `font_name`: The name of the Google Font to use
+- `font_size`: The size of the font for the centred text
+
+## Licence
+
+This project is open-source and available under the MIT Licence.
+
+## Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/IliaRyzhkovPR/qr-code-generator/issues).
+
+## Demo
+
+TBC
 
 ## Notes
 
-- Ensure that the Montserrat font is installed or available in the specified path for optimal text rendering.
-- The script uses the vCard format to store contact information in the QR code.
+- The application uses Google Fonts API to fetch fonts. If a font is unavailable, it falls back to a default font.
 - The generated QR code includes a frame and rounded corners for improved aesthetics.

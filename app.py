@@ -11,13 +11,26 @@ import os
 
 app = Flask(__name__)
 
-def get_google_font(font_name):
+# List of common system fonts
+SYSTEM_FONTS = [
+    "Arial", "Helvetica", "Times New Roman", "Courier New", 
+    "Verdana", "Georgia", "Palatino", "Garamond", "Bookman",
+    "Comic Sans MS", "Trebuchet MS", "Arial Black"
+]
+
+def get_font(font_name, font_size):
+    if font_name in SYSTEM_FONTS:
+        try:
+            return ImageFont.truetype(font_name, font_size)
+        except IOError:
+            print(f"System font {font_name} not found. Using default font.")
+            return ImageFont.load_default()
+    
     try:
         url = f"https://fonts.googleapis.com/css?family={font_name.replace(' ', '+')}"
         response = requests.get(url)
-        response.raise_for_status()  # Raise an exception for bad responses
+        response.raise_for_status()
         
-        # Try to find the font URL in the response
         font_url = None
         for line in response.text.split('\n'):
             if 'url(' in line and '.ttf' in line:
@@ -28,16 +41,15 @@ def get_google_font(font_name):
             font_response = requests.get(font_url)
             font_response.raise_for_status()
             
-            # Save the font to a temporary file
             with tempfile.NamedTemporaryFile(delete=False, suffix=".ttf") as temp_font_file:
                 temp_font_file.write(font_response.content)
-                return temp_font_file.name
+                return ImageFont.truetype(temp_font_file.name, font_size)
         else:
-            print(f"Could not find font URL for {font_name}")
-            return None
+            print(f"Could not find Google Font URL for {font_name}")
+            return ImageFont.load_default()
     except Exception as e:
         print(f"Error fetching Google Font: {str(e)}")
-        return None
+        return ImageFont.load_default()
     
 def generate_vcard_qr(name, title, email, phone=None, company=None, website=None, linkedin=None, youtube=None, 
                       qr_color='#FF8138', frame_color='#33627D', frame_width=10, corner_radius=20, font_name='Roboto', font_size=100):
