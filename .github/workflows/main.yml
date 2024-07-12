@@ -1,0 +1,13 @@
+name: Call Web Page Every 15 Minutes
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  call-web-page:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Make Web Page Call
+      run: curl -X GET "http://qr-code-generator-ksbv.onrender.com/"
