@@ -46,7 +46,8 @@ def get_google_font(font_name):
         return None
     
 def generate_vcard_qr(name, title, email, phone=None, company=None, website=None, linkedin=None, youtube=None, 
-                      qr_color='#FF8138', frame_color='#33627D', frame_width=10, corner_radius=20, font_name='Roboto', font_size=100):
+                      qr_color='#FF8138', frame_color='#33627D', frame_width=10, corner_radius=20,
+                      font_name='Roboto', font_size=100, logo=None, use_logo=False):
     # Create vCard
     vcard = vobject.vCard()
     vcard.add('n').value = vobject.vcard.Name(family=name.split()[-1], given=name.split()[0])
@@ -91,36 +92,42 @@ def generate_vcard_qr(name, title, email, phone=None, company=None, website=None
     draw = ImageDraw.Draw(img)
     draw.rectangle([center_pos, center_pos, center_pos + center_size, center_pos + center_size], fill="white")
 
-    # Add company name or initials if no company
-    text_to_draw = company if company else ''.join([name[0] for name in name.split() if name])
-
-     # Get and use the Google Font
-    font_path = get_google_font(font_name)
-    if font_path:
-        try:
-            font = ImageFont.truetype(font_path, font_size)
-            print(f"Successfully loaded font: {font_name}")
-        except IOError as e:
-            print(f"Error loading font {font_name}: {str(e)}. Using default font.")
-            font = ImageFont.load_default()
+    # Add logo
+    if use_logo and logo:
+        # Resize and paste the logo
+        logo = Image.open(logo).convert("RGBA")
+        logo = logo.resize((center_size, center_size), Image.LANCZOS)
+        img.paste(logo, (center_pos, center_pos), logo)
     else:
-        print(f"Unable to fetch {font_name}. Using default font.")
-        font = ImageFont.load_default()   
+        # Add company name or initials if no logo
+        text_to_draw = company if company else ''.join([name[0] for name in name.split() if name])
+        # Get and use the Google Font
+        font_path = get_google_font(font_name)
+        if font_path:
+            try:
+                font = ImageFont.truetype(font_path, font_size)
+                print(f"Successfully loaded font: {font_name}")
+            except IOError as e:
+                print(f"Error loading font {font_name}: {str(e)}. Using default font.")
+                font = ImageFont.load_default()
+        else:
+            print(f"Unable to fetch {font_name}. Using default font.")
+            font = ImageFont.load_default()   
 
-    # Calculate text position
-    text_bbox = font.getbbox(text_to_draw)
-    text_width = text_bbox[2] - text_bbox[0]
-    text_height = text_bbox[3] - text_bbox[1]
-    text_pos = (center_pos + (center_size - text_width) // 2, 
-                center_pos + (center_size - text_height) // 2)
+        # Calculate text position
+        text_bbox = font.getbbox(text_to_draw)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
+        text_pos = (center_pos + (center_size - text_width) // 2, 
+                    center_pos + (center_size - text_height) // 2)
 
-    # Draw the text
-    draw.text(text_pos, text_to_draw, font=font, fill=frame_color)
+        # Draw the text
+        draw.text(text_pos, text_to_draw, font=font, fill=frame_color)
 
-    # Clean up the temporary font file
-    if font_path and os.path.exists(font_path):
-        os.unlink(font_path)
-        print(f"Deleted temporary font file: {font_path}")
+        # Clean up the temporary font file
+        if font_path and os.path.exists(font_path):
+            os.unlink(font_path)
+            print(f"Deleted temporary font file: {font_path}")
 
     # Add a frame
     framed = ImageOps.expand(img, border=frame_width, fill=frame_color)
@@ -143,6 +150,9 @@ def generate_vcard_qr(name, title, email, phone=None, company=None, website=None
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
+        logo = request.files.get('logo')
+        use_logo = logo and logo.filename != ''  # Check if a logo was actually uploaded
+        
         qr_image = generate_vcard_qr(
             name=request.form['name'],
             title=request.form['title'],
@@ -155,10 +165,15 @@ def index():
             qr_color=request.form['qr_color'],
             frame_color=request.form['frame_color'],
             font_name=request.form['font'],
-            font_size=int(request.form['font_size'])
+            font_size=int(request.form['font_size']),
+            logo=logo if use_logo else None,
+            use_logo=use_logo
         )
         return send_file(qr_image, mimetype='image/png', as_attachment=True, download_name='qr_code.png')
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    if 'RENDER' in os.environ:
+        app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    else:
+        app.run(debug='true')

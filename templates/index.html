@@ -129,12 +129,16 @@
 <body>
     <div class="container">
         <h1>Phone Contact QR Code Generator</h1>
-        <form action="/" method="post">
+        <form action="/" method="post" enctype="multipart/form-data">
             <input type="text" name="name" placeholder="Full Name" required>
             <input type="text" name="title" placeholder="Job Title" required>
             <input type="tel" name="phone" placeholder="Phone Number">
             <input type="email" name="email" placeholder="Email" required>
             <input type="text" name="company" placeholder="Company">
+            <div>
+                <label for="logo">Upload Logo (Optional, PNG or JPEG):</label>
+                <input type="file" id="logo" name="logo" accept="image/png, image/jpeg"> 
+            </div>
             <input type="url" name="website" placeholder="Website">
             <input type="url" name="linkedin" placeholder="LinkedIn URL">
             <input type="url" name="youtube" placeholder="YouTube URL">
