@@ -21,19 +21,23 @@
             background-color: var(--background-color);
             margin: 0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
         }
 
-        .container {
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .qr-generator, .feedback-container {
             background-color: var(--input-background);
-            padding: 30px;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
         }
 
         h1 {
@@ -47,7 +51,7 @@
             gap: 15px;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid var(--input-border);
@@ -59,15 +63,13 @@
 
         select {
             appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
             background-image: url('data:image/svg+xml;utf8,<svg fill="%2333627D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
             background-repeat: no-repeat;
             background-position-x: 98%;
             background-position-y: 50%;
         }
 
-        input:focus {
+        input:focus, textarea:focus {
             outline: none;
             border-color: var(--primary-color);
         }
@@ -87,7 +89,7 @@
             background-color: var(--secondary-color);
         }
 
-        .color-picker {
+        .color-picker, .slider {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -104,12 +106,6 @@
             border: none;
         }
 
-        .slider {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
         .slider input[type="range"] {
             flex: 1;
         }
@@ -124,67 +120,93 @@
             text-align: right;
         }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
+        .consent-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .consent-checkbox input[type="checkbox"] {
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .qr-generator, .feedback-container {
+                width: 100%;
+                margin-bottom: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Phone Contact QR Code Generator</h1>
-        <form action="/" method="post" enctype="multipart/form-data">
-            <input type="text" name="name" placeholder="Full Name (required)" required>
-            <input type="text" name="title" placeholder="Job Title (required)" required>
-            <input type="tel" name="phone" placeholder="Phone Number (optional)">
-            <input type="email" name="email" placeholder="Email (required)" required>
-            <input type="text" name="company" placeholder="Company (optional)">
-            <div>
-                <label for="logo">Upload Logo (Optional, PNG or JPEG):</label>
-                <input type="file" id="logo" name="logo" accept="image/png, image/jpeg"> 
-            </div>
-            <input type="url" name="website" placeholder="Website (optional)">
-            <input type="url" name="linkedin" placeholder="LinkedIn URL (optional)">
-            <input type="url" name="youtube" placeholder="YouTube URL (optional)">
-            <select id="font" name="font" required>
-                <option value="Abril Fatface">Abril Fatface</option>
-                <option value="Bebas Neue">Bebas Neue</option>
-                <option value="Comfortaa">Comfortaa</option>
-                <option value="Dancing Script">Dancing Script</option>
-                <option value="Lato">Lato</option>
-                <option value="Lobster">Lobster</option>
-                <option value="Merriweather">Merriweather</option>
-                <option value="Montserrat">Montserrat</option>
-                <option value="Open Sans">Open Sans</option>
-                <option value="Oswald">Oswald</option>
-                <option value="Pacifico">Pacifico</option>
-                <option value="Playfair Display">Playfair Display</option>
-                <option value="Quicksand">Quicksand</option>
-                <option value="Roboto">Roboto</option>
-                <option value="Ubuntu">Ubuntu</option>
-            </select>
-            <div class="slider">
-                <label for="font_size">Font Size:</label>
-                <input type="range" id="font_size" name="font_size" min="10" max="500" value="30">
-                <span id="font-slider-value">30</span>
-            </div>
-            <div class="color-picker">
-                <label for="qr_color">QR Code Color:</label>
-                <input type="color" id="qr_color" name="qr_color" value="#FF8138">
-            </div>
-            <div class="color-picker">
-                <label for="frame_color">Frame Color:</label>
-                <input type="color" id="frame_color" name="frame_color" value="#33627D">
-            </div>
-            <div class="slider">
-                <label for="qr_size">QR Code Image Size:</label>
-                <input type="range" id="qr_size" name="qr_size" min="100" max="1000" value="300">
-                <span id="img-slider-value" class="qr-slider-value">300</span>
-                <span>px</span>
-            </div>
-            <button type="submit">Generate QR Code</button>
-        </form>
+    <div class="main-container">
+        <div class="qr-generator">
+            <h1>Phone Contact QR Code Generator</h1>
+            <form id="qr-form" action="/" method="post" enctype="multipart/form-data">
+                <input type="text" name="name" placeholder="Full Name (required)" required>
+                <input type="text" name="title" placeholder="Job Title (required)" required>
+                <input type="tel" name="phone" placeholder="Phone Number (optional)">
+                <input type="email" name="email" placeholder="Email (required)" required>
+                <input type="text" name="company" placeholder="Company (optional)">
+                <div>
+                    <label for="logo">Upload Logo (Optional, PNG or JPEG):</label>
+                    <input type="file" id="logo" name="logo" accept="image/png, image/jpeg"> 
+                </div>
+                <input type="url" name="website" placeholder="Website (optional)">
+                <input type="url" name="linkedin" placeholder="LinkedIn URL (optional)">
+                <input type="url" name="youtube" placeholder="YouTube URL (optional)">
+                <select id="font" name="font" required>
+                    <option value="Abril Fatface">Abril Fatface</option>
+                    <option value="Bebas Neue">Bebas Neue</option>
+                    <option value="Comfortaa">Comfortaa</option>
+                    <option value="Dancing Script">Dancing Script</option>
+                    <option value="Lato">Lato</option>
+                    <option value="Lobster">Lobster</option>
+                    <option value="Merriweather">Merriweather</option>
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="Open Sans">Open Sans</option>
+                    <option value="Oswald">Oswald</option>
+                    <option value="Pacifico">Pacifico</option>
+                    <option value="Playfair Display">Playfair Display</option>
+                    <option value="Quicksand">Quicksand</option>
+                    <option value="Roboto">Roboto</option>
+                    <option value="Ubuntu">Ubuntu</option>
+                </select>
+                <div class="slider">
+                    <label for="font_size">Font Size:</label>
+                    <input type="range" id="font_size" name="font_size" min="10" max="500" value="30">
+                    <span id="font-slider-value">30</span>
+                </div>
+                <div class="color-picker">
+                    <label for="qr_color">QR Code Color:</label>
+                    <input type="color" id="qr_color" name="qr_color" value="#FF8138">
+                </div>
+                <div class="color-picker">
+                    <label for="frame_color">Frame Color:</label>
+                    <input type="color" id="frame_color" name="frame_color" value="#33627D">
+                </div>
+                <div class="slider">
+                    <label for="qr_size">QR Code Image Size:</label>
+                    <input type="range" id="qr_size" name="qr_size" min="100" max="1000" value="300">
+                    <span id="img-slider-value" class="qr-slider-value">300</span>
+                    <span>px</span>
+                </div>
+                <button type="submit">Generate QR Code</button>
+            </form>
+        </div>
+        <div class="feedback-container">
+            <h2>Provide Feedback</h2>
+            <form id="feedback-form" action="https://formspree.io/f/mpwawqnp" method="POST">
+                <textarea name="feedback" placeholder="Your feedback" required></textarea>
+                <div class="consent-checkbox">
+                    <input type="checkbox" id="consent" name="consent" checked>
+                    <label for="consent">I agree to share my contact information along with this feedback.</label>
+                </div>
+                <button type="submit">Send Feedback</button>
+            </form>
+        </div>
     </div>
     <script>
         const fontSizeSlider = document.getElementById('font_size');
@@ -197,6 +219,40 @@
         qrSizeSlider.addEventListener('input', function() {
             qrSizeValue.textContent = this.value;
         });
+
+        const qrForm = document.getElementById('qr-form');
+        const feedbackForm = document.getElementById('feedback-form');
+        const consentCheckbox = document.getElementById('consent');
+
+        qrForm.addEventListener('input', updateFeedbackForm);
+        feedbackForm.addEventListener('submit', handleFeedbackSubmit);
+
+        function updateFeedbackForm(e) {
+            const field = e.target;
+            // List all the fields you want to include from the QR form
+            const fieldsToInclude = ['name', 'title', 'phone', 'email', 'company', 'website', 'linkedin', 'youtube', 'font', 'font_size', 'qr_color', 'frame_color', 'qr_size'];
+            
+            if (fieldsToInclude.includes(field.name)) {
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = field.name;
+                hiddenField.value = field.value;
+
+                const existingField = feedbackForm.querySelector(`input[name="${field.name}"]`);
+                if (existingField) {
+                    feedbackForm.removeChild(existingField);
+                }
+
+                feedbackForm.appendChild(hiddenField);
+            }
+        }
+
+        function handleFeedbackSubmit(e) {
+            if (!consentCheckbox.checked) {
+                const hiddenFields = feedbackForm.querySelectorAll('input[type="hidden"]');
+                hiddenFields.forEach(field => feedbackForm.removeChild(field));
+            }
+        }
     </script>
 </body>
 </html>
