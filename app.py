@@ -12,15 +12,38 @@ import os
 app = Flask(__name__)
 
 def get_google_font(font_name):
+    print(f"Attempting to fetch font: {font_name}")
     url = f"https://fonts.googleapis.com/css?family={font_name.replace(' ', '+')}"
-    response = requests.get(url)
-    font_url = response.text.split("url(")[1].split(")")[0]
-    font_response = requests.get(font_url)
-    
-    # Save the font to a temporary file
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".ttf") as temp_font_file:
-        temp_font_file.write(font_response.content)
-        return temp_font_file.name
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # This will raise an HTTPError for bad responses
+        print(f"Response status code: {response.status_code}")
+        print("Response content:")
+        print(response.text)
+        
+        if "url(" not in response.text:
+            print("Error: 'url(' not found in response text")
+            return None
+
+        font_url_parts = response.text.split("url(")
+        if len(font_url_parts) < 2:
+            print("Error: Unable to find font URL in response")
+            return None
+
+        font_url = font_url_parts[1].split(")")[0]
+        print(f"Font URL: {font_url}")
+
+        font_response = requests.get(font_url)
+        font_response.raise_for_status()
+        
+        # Save the font to a temporary file
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".ttf") as temp_font_file:
+            temp_font_file.write(font_response.content)
+            print(f"Font saved to temporary file: {temp_font_file.name}")
+            return temp_font_file.name
+    except requests.RequestException as e:
+        print(f"Error fetching font: {str(e)}")
+        return None
     
 def generate_vcard_qr(name, title, email, phone=None, company=None, website=None, linkedin=None, youtube=None, 
                       qr_color='#FF8138', frame_color='#33627D', frame_width=10, corner_radius=20, font_name='Roboto', font_size=100):
@@ -73,11 +96,16 @@ def generate_vcard_qr(name, title, email, phone=None, company=None, website=None
 
      # Get and use the Google Font
     font_path = get_google_font(font_name)
-    try:
-        font = ImageFont.truetype(font_path, font_size)
-    except IOError:
-        font = ImageFont.load_default()
-        print(f"{font_name} font not found. Using default font.")   
+    if font_path:
+        try:
+            font = ImageFont.truetype(font_path, font_size)
+            print(f"Successfully loaded font: {font_name}")
+        except IOError as e:
+            print(f"Error loading font {font_name}: {str(e)}. Using default font.")
+            font = ImageFont.load_default()
+    else:
+        print(f"Unable to fetch {font_name}. Using default font.")
+        font = ImageFont.load_default()   
 
     # Calculate text position
     text_bbox = font.getbbox(text_to_draw)
@@ -90,7 +118,9 @@ def generate_vcard_qr(name, title, email, phone=None, company=None, website=None
     draw.text(text_pos, text_to_draw, font=font, fill=frame_color)
 
     # Clean up the temporary font file
-    os.unlink(font_path)
+    if font_path and os.path.exists(font_path):
+        os.unlink(font_path)
+        print(f"Deleted temporary font file: {font_path}")
 
     # Add a frame
     framed = ImageOps.expand(img, border=frame_width, fill=frame_color)
