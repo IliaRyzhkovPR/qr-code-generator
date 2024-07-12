@@ -47,7 +47,7 @@ def get_google_font(font_name):
     
 def generate_vcard_qr(name, title, email, phone=None, company=None, website=None, linkedin=None, youtube=None, 
                       qr_color='#FF8138', frame_color='#33627D', frame_width=10, corner_radius=20,
-                      font_name='Roboto', font_size=100, logo=None, use_logo=False):
+                      font_name='Roboto', font_size=100, logo=None, use_logo=False, qr_size=300):
     # Create vCard
     vcard = vobject.vCard()
     vcard.add('n').value = vobject.vcard.Name(family=name.split()[-1], given=name.split()[0])
@@ -82,6 +82,7 @@ def generate_vcard_qr(name, title, email, phone=None, company=None, website=None
 
     # Create QR code image with specified color
     img = qr.make_image(fill_color=qr_color, back_color="white").convert('RGB')
+    img = img.resize((qr_size, qr_size), Image.LANCZOS)
 
     # Calculate center area to clear
     size = img.size[0]
