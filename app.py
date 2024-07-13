@@ -174,7 +174,9 @@ def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    if 'RENDER' in os.environ:
-        app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-    else:
-        app.run(debug='true')
+    # This block will only run when execute the script directly
+    # It won't run on Vercel
+    app.run(debug=True)
+
+# This line is for Vercel
+app = app
