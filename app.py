@@ -9,7 +9,7 @@ import requests
 import tempfile
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 def get_google_font(font_name):
     print(f"Attempting to fetch font: {font_name}")
@@ -176,7 +176,7 @@ def index():
 if __name__ == '__main__':
     # This block will only run when execute the script directly
     # It won't run on Vercel
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)
 
 # This line is for Vercel
 app = app

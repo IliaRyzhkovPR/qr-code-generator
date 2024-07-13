@@ -1,0 +1,196 @@
+.share-container {
+    /* margin-top: 20px; */
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.share-container h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.share-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.share-buttons button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.share-buttons button:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.share-buttons button:active {
+    transform: scale(0.98);
+}
+
+#copy-link {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#share-facebook {
+    background-color: #3b5998;
+    color: white;
+}
+
+#share-twitter {
+    background-color: #1da1f2;
+    color: white;
+}
+
+#share-linkedin {
+    background-color: #0077b5;
+    color: white;
+}
+
+#page-qr {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.site-footer {
+    background-color: #fff;
+    color: #33627D;
+    padding: 40px 0 20px;
+    margin-top: 40px;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.company-info, .contact-info, .social-links {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+
+.company-info h3, .contact-info h4, .social-links h4 {
+    margin-bottom: 15px;
+    color: #33627D;
+}
+
+.contact-info p {
+    margin: 5px 0;
+}
+
+.contact-info i, .social-links i {
+    margin-right: 10px;
+    color: #FF8138;
+}
+
+.social-links a {
+    color: #fff;
+    font-size: 24px;
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #33627D;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #FF8138;
+}
+
+.footer-bottom p {
+    margin: 5px 0;
+}
+
+.footer-bottom a {
+    color: #FF8138;
+    text-decoration: none;
+}
+
+.footer-bottom a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .company-info, .contact-info, .social-links {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.modal-content h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.modal-content p, .modal-content li {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.modal-content ol {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+#closeModal {
+    background-color: #33627D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+#closeModal:hover {
+    background-color: #33627D;
+}

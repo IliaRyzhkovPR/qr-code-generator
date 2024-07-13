@@ -8,11 +8,36 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-S2ZC876Y3L');
+    gtag('config', 'G-S2ZC876Y3L', {
+    'cookie_domain': 'qr.dbax.co.uk'
+    });
     </script>
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        </script>
+        <script defer src="/_vercel/insights/script.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phone Contact QR Code Generator</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://kit.fontawesome.com/16211b5b39.js" crossorigin="anonymous"></script>
+    <meta name="description" content="Generate custom QR codes for your phone contacts. Easy to use, with options for logos, colors, and fonts. Create professional QR codes for business cards and more.">
+    <meta name="keywords" content="QR code, contact information, business card, vCard, phone contact">
+    <meta name="author" content="DBAX Ltd">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https:qr.dbax.co.uk/">
+    <meta property="og:title" content="Phone Contact QR Code Generator">
+    <meta property="og:description" content="Create custom QR codes for your phone contacts with our easy-to-use generator.">
+    <meta property="og:image" content="{{ url_for('static', filename='images/favicon.png') }}">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https:qr.dbax.co.uk/">
+    <meta property="twitter:title" content="Phone Contact QR Code Generator">
+    <meta property="twitter:description" content="Create custom QR codes for your phone contacts with our easy-to-use generator.">
+    <meta property="twitter:image" content="{{ url_for('static', filename='images/favicon.png') }}">
     <style>
         :root {
             --primary-color: #33627D;
@@ -138,6 +163,16 @@
             margin-top: 4px;
         }
 
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .page-logo {
+            max-width: 100px;
+            height: auto;
+        }
+
         @media (max-width: 768px) {
             .main-container {
                 flex-direction: column;
@@ -151,6 +186,19 @@
 </head>
 <body>
     <div class="main-container">
+        <div class="share-container">
+            <h2>Share This Tool</h2>
+            <div class="share-buttons">
+                <button id="copy-link">Copy Link</button>
+                <button id="share-facebook">Share on Facebook</button>
+                <button id="share-twitter">Share on Twitter</button>
+                <button id="share-linkedin">Share on LinkedIn</button>
+            </div>
+            <!-- <div id="page-qr"></div> -->
+        </div>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/favicon.png') }}" alt="Logo" class="page-logo">
+        </div>
         <div class="qr-generator">
             <h1>Phone Contact QR Code Generator</h1>
             <form id="qr-form" action="/" method="post" enctype="multipart/form-data">
@@ -217,6 +265,51 @@
             </form>
         </div>
     </div>
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="company-info">
+                <h3>QR Code Generator</h3>
+                <p>An open-source tool for generating customisable QR codes.</p>
+            </div>
+            <div class="contact-info">
+                <h4>Contact Us</h4>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:info@dbax.co.uk">info@dbax.co.uk</a></p>
+                <p><i class="fas fa-globe"></i> <a href="https://dbax.co.uk" target="_blank">dbax.co.uk</a></p>
+                <p><i class="fas fa-phone"></i> +44 7479563847</p>
+                <p><i class="fas fa-map-marker-alt"></i> Exeter, UK</p>
+            </div>
+            <div class="social-links">
+                <h4>Contribute</h4>
+                <a href="https://github.com/IliaRyzhkovPR/qr-code-generator" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+            <div class="social-links">
+                <h4>Follow Us</h4>
+                <a href="https://linkedin.com/in/ryzhkovilya" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://x.com/RyzhkovIlia" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                <a href="https://github.com/IliaRyzhkovPR" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://www.youtube.com/@DBAXLTD" target="_blank"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Licensed under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a></p>
+            <p>&copy; 2024 QR Code Generator Contributors</p>
+        </div>
+    </footer>
+    <!-- Modal -->
+    <div id="descriptionModal" class="modal">
+        <div class="modal-content">
+            <h2>Welcome to QR Code Generator for Phone Contacts</h2>
+            <p>Create custom QR codes for your phone contact information in just a few steps:</p>
+            <ol>
+                <li>Enter your contact details in the form below</li>
+                <li>Customise the QR code appearance</li>
+                <li>Click "Generate QR Code" to create your unique QR code</li>
+                <li>Download your QR code for easy contact sharing!</li>
+            </ol>
+            <p>Scan the generated QR code with any smartphone camera to instantly add the contact information.</p>
+            <button id="closeModal">Got it, let's start!</button>
+        </div>
+    </div>
     <script>
         const fontSizeSlider = document.getElementById('font_size');
         const fontSizeValue = document.getElementById('font-slider-value');
@@ -263,5 +356,6 @@
             }
         }
     </script>
+    <script src="{{ url_for('static', filename='js/share.js') }}"></script>
 </body>
 </html>
