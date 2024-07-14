@@ -156,7 +156,7 @@
 
 .modal-content {
     background-color: #fff;
-    margin: 15% auto;
+    margin: 5% auto;
     padding: 30px;
     border-radius: 8px;
     max-width: 600px;
@@ -192,5 +192,5 @@
 }
 
 #closeModal:hover {
-    background-color: #33627D;
+    background-color: #FF8138;
 }
