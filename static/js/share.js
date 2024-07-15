@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const shareTwitterBtn = document.getElementById('share-twitter');
     const shareLinkedInBtn = document.getElementById('share-linkedin');
     const pageQrContainer = document.getElementById('page-qr');
+    const shareUrl = window.location.href; // URL to share
+    const shareTitle = "Check out this QR Code Generator!";
+    const shareDescription = "Create custom QR codes for your phone contacts with our easy-to-use generator.";
+    const shareHashtag = "#QRCodeGenDBAX"; // Hashtag for social media sharing
 
     // Copy link functionality
     copyLinkBtn.addEventListener('click', function() {
@@ -16,18 +20,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Social media sharing
     shareFacebookBtn.addEventListener('click', function() {
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+        const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+        window.open(fbShareUrl, '_blank');
     });
 
     shareTwitterBtn.addEventListener('click', function() {
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent('Check out this QR Code Generator!')}`, '_blank');
+        const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}&hashtags=${shareHashtag.slice(1)}`;
+        window.open(twitterShareUrl, '_blank');
     });
 
     shareLinkedInBtn.addEventListener('click', function() {
-        const url = encodeURIComponent(window.location.href);
-        const title = encodeURIComponent('Check out this QR Code Generator!');
-        const summary = encodeURIComponent('Create custom QR codes for your phone contacts with our easy-to-use generator.');
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}&summary=${summary}`, '_blank');
+        const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+        window.open(linkedInShareUrl, '_blank');
     });
 
     // Generate QR code for the page
