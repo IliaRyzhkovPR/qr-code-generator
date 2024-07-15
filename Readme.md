@@ -2,6 +2,10 @@
 
 This project generates a customised QR code containing vCard information, with options for custom colours, font selection, and styling.
 
+## Overview
+
+![QR Code Generator Overview](assets/Overview.gif)
+
 ## Features
 
 - Generate QR codes with vCard information
@@ -9,6 +13,11 @@ This project generates a customised QR code containing vCard information, with o
 - Google Fonts integration for text styling
 - Responsive web interface
 - Downloadable QR code image
+- Social media sharing functionality
+
+## Demo
+
+Visit [QR Code Generator](https://qr.dbax.co.uk/) to see the live app.
 
 ## Setup
 
@@ -51,18 +60,25 @@ This project generates a customised QR code containing vCard information, with o
 
 4. The generated QR code will be downloaded automatically.
 
+5. Use the sharing options to share the tool on social media platforms.
+
 ## Deployment
 
-This application is deployed on Render. Follow these steps to do the same:
+This application is deployed on Vercel. Follow these steps to deploy your own instance:
 
 1. Push your code to a GitHub repository.
-2. Create a new Web Service on Render, connecting to your GitHub repo.
-3. Render will automatically detect it's a Python app and set most configuration options.
-4. Set the following:
-   - Environment: `Python`
+2. Sign up for a Vercel account if you haven't already.
+3. In Vercel, click "New Project" and select your GitHub repository.
+4. Vercel will automatically detect it's a Python app. Ensure the following settings:
+   - Framework Preset: Other
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `gunicorn app:app`
-5. Click "Create Web Service".
+   - Output Directory: Leave blank
+   - Install Command: `pip install -r requirements.txt`
+   - Development Command: `python app.py`
+5. Add the following environment variable:
+   - Key: `PYTHON_VERSION`
+   - Value: `3.9` (or your preferred Python version)
+6. Click "Deploy" to start the deployment process.
 
 ## Customisation Options
 
@@ -79,11 +95,15 @@ This project is open-source and available under the MIT Licence.
 
 Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/IliaRyzhkovPR/qr-code-generator/issues).
 
-## Demo
-
-TBC
-
 ## Notes
 
 - The application uses Google Fonts API to fetch fonts. If a font is unavailable, it falls back to a default font.
 - The generated QR code includes a frame and rounded corners for improved aesthetics.
+- Social media sharing functionality is implemented using respective platform APIs.
+- When sharing, use the hashtag #QRCodeGenDBAX to help us track and engage with users.
+
+## Contact
+
+For any queries or support, please contact:
+- Email: info@dbax.co.uk
+- Website: [https://dbax.co.uk](https://dbax.co.uk)
