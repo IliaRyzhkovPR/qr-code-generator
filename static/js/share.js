@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     shareTwitterBtn.addEventListener('click', function() {
-        const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}&hashtags=${shareHashtag.slice(1)}`;
+        const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}&hashtags=${encodeURIComponent(shareHashtag.slice(1))}`;
         window.open(twitterShareUrl, '_blank');
     });
 
