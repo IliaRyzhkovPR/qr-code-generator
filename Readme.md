@@ -19,6 +19,11 @@ This project generates a customised QR code containing vCard information, with o
 
 Visit [QR Code Generator](https://qr.dbax.co.uk/) to see the live app.
 
+## Architecture
+
+Please see the architecture documentation [here](architecture/architecture.md).
+
+
 ## Setup
 
 1. Clone the repository:
