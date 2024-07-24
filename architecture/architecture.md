@@ -2,7 +2,7 @@
 
 The diagram illustrates the flow of data and interactions in the QR Code Generator application, based on the actual implementation in Flask. Here's a step-by-step breakdown:
 
-![QR Code Generator Overview](assets/qr_code_generator_architecture.png)
+![QR Code Generator Overview](../assets/qr_code_generator_architecture.png)
 
 1. **User Access (User -> HTML Form)**
    The process begins when a user accesses the application through their web browser. They are presented with an HTML form to input their contact information and QR code preferences.
